@@ -1,32 +1,60 @@
-
 import requests
 from bs4 import BeautifulSoup as bs
-global_url = 'https://news.daum.net/ranking/kkomkkom/news'
-entertain_url = 'https://news.daum.net/ranking/kkomkkom/entertain'
-sports_url = "https://news.daum.net/ranking/kkomkkom/sports"
-
-res = requests.get(url)
 
 
 def newsCategory():
-    print("국제 뉴스[1], 연애 기사[2], 스포츠 기사[3] 중에서 \n 무슨 구독하시겠습니까?")
+    print("어떤 기사를 구독하시겠습니까?")
+    print("사회뉴스[1], 정치뉴스[2], 경제뉴스[3], 국제뉴스[4], 문화뉴스[5], IT뉴스[6]")
     print("입력 예시: 1,2,4")
-    news_list = list(map(int, input("구독할 뉴스: ").split(",")))
-    return news_list
+    num_list = list(map(int, input("구독할 뉴스: ").split(",")))
+    print(num_list)
+    return num_list
 
 
 def Switcher(number):
     if number == 1:
-        return "news"
+        return "society"
     elif number == 2:
-        return "entertain"
+        return "politics"
     elif number == 3:
-        return "sports"
-    else:
-        return
+        return "economic"
+    elif number == 4:
+        return "foreign"
+    elif number == 5:
+        return "culture"
+    elif number == 6:
+        return "digital"
 
 
 def Crawler(news_list):
+    article_list = []
     for news in news_list:
         keyword = Switcher(news)
-        url = "https://news.daum.net/ranking/kkomkkom/{}".format(keyword)
+        url = "https://news.daum.net/{}/#1".format(keyword)
+        res = requests.get(url)
+
+        soup = bs(res.text, 'lxml')
+        ul = soup.find("ul", {"class": "list_mainnews"}).findAll("li")
+        len(ul)
+
+        news = []
+        for li in ul:
+            data = li.find("a", {"class": "link_txt"})
+            news.append({
+                'title': data.text,
+                'url': data.get("href")
+            })
+
+        res = requests.get(news[0]['url'])
+        soup = bs(res.text, 'lxml')
+        contents = soup.find("div", {"id": "harmonyContainer"}).find(
+            "section").findAll("p")[:-1]
+
+        text_list = []
+        for p in contents:
+            p_text = p.text
+            text_list.append(p_text)
+
+        article = "".join(text_list)
+        article_list.append(article)
+    return article_list

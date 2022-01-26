@@ -45,9 +45,3 @@ def infoCheck():
     except:
         print("일치하는 정보가 없습니다!")
     return name
-
-# 해쉬태그 서칭
-
-
-def connect(url):
-    driver.get('https://www.mangoplate.com/search/' + url)

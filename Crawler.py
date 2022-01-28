@@ -34,27 +34,28 @@ def Crawler(news_list):
         res = requests.get(url)
 
         soup = bs(res.text, 'lxml')
-        ul = soup.find("ul", {"class": "list_mainnews"}).findAll("li")
-        len(ul)
+        ul = soup.find("ul", {"class": "list_mainnews"}).find("li")
 
         news = []
-        for li in ul:
-            data = li.find("a", {"class": "link_txt"})
-            news.append({
-                'title': data.text,
-                'url': data.get("href")
-            })
+        data = ul.find("a", {"class": "link_txt"})
+        news.append({
+            'title': data.text,
+            'url': data.get("href")
+        })
 
         res = requests.get(news[0]['url'])
         soup = bs(res.text, 'lxml')
         contents = soup.find("div", {"id": "harmonyContainer"}).find(
             "section").findAll("p")[:-1]
 
-        text_list = []
+        p_list = []
         for p in contents:
             p_text = p.text
-            text_list.append(p_text)
+            p_list.append(p_text)
 
-        article = "".join(text_list)
+        p_sum = "".join(p_list)
+
+        article = {data.text: p_sum}
         article_list.append(article)
+    print(article_list)
     return article_list

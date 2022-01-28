@@ -26,7 +26,7 @@ def Switcher(number):
         return "digital"
 
 
-def Crawler(news_list):
+def crawler(news_list):
     article_list = []
     for news in news_list:
         keyword = Switcher(news)
@@ -54,8 +54,8 @@ def Crawler(news_list):
             p_list.append(p_text)
 
         p_sum = "".join(p_list)
+        p_sum = p_sum[0:1199]
 
         article = {data.text: p_sum}
         article_list.append(article)
-    print(article_list)
     return article_list

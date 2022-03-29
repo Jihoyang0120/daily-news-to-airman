@@ -1,2 +1,2 @@
-# Daily_news_to_airman
-공군 훈련병에게 보내는 뉴스 크롤러(Python, Selenium)
+# daily-news-to-airman
+공군 훈련병에게 매일 뉴스를 보내는 크롤러
